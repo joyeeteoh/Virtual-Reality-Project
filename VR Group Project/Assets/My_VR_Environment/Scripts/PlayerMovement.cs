@@ -40,14 +40,14 @@ public class PlayerMovement : MonoBehaviour
         // Vector3 forward = transform.TransformDirection(Vector3.forward);
         // Vector3 right = transform.TransformDirection(Vector3.right);
 
-// add
+        // add
         Vector3 forward = playerCamera.transform.forward;
         Vector3 right = playerCamera.transform.right;
         forward.y = 0f;
         right.y = 0f;
         forward.Normalize();
         right.Normalize();
-// end
+        // end
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         float curSpeedX = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Vertical") : 0;
         float curSpeedY = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Horizontal") : 0;
@@ -84,14 +84,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         characterController.Move(moveDirection * Time.deltaTime);
-// add
+        // add
         Vector3 lookDir = new Vector3(moveDirection.x, 0, moveDirection.z);
         if (lookDir != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(lookDir);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
-// end
+        // end
 
         if (canMove)
         {
@@ -104,4 +104,13 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("Speed", horizontalVelocity.magnitude);
 
     }
+    
+    //MW: Prevent player from moving when the shop is open.
+        public void SetCanMove(bool status)
+    {
+        canMove = status;
+        Cursor.lockState = status ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = !status;
+    }
 }
+
